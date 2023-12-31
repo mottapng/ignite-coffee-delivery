@@ -1,4 +1,4 @@
-import { Card } from '../../../../components/Card/Catalog'
+import { CatalogCard } from '../../../../components/Card/Catalog'
 import { coffees } from '../../../../constants/coffees'
 import { CardsWrapper, CatalogContainer } from './styles'
 
@@ -8,7 +8,7 @@ export const Catalog = () => {
       <h2>Nossos Cafés</h2>
       <CardsWrapper>
         {coffees.map((coffee) => (
-          <Card
+          <CatalogCard
             key={coffee.id}
             id={coffee.id}
             name={coffee.name}

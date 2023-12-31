@@ -7,7 +7,9 @@ export const InputNumber = () => {
   const [count, setCount] = useState(1)
 
   const increment = () => {
-    setCount((prevCount) => prevCount + 1)
+    if (count < 99) {
+      setCount((prevCount) => prevCount + 1)
+    }
   }
 
   const decrement = () => {

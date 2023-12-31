@@ -67,10 +67,13 @@ interface IconProps {
 }
 
 export const Icon = styled.div<IconProps>`
-  padding: 8px;
   border-radius: 50%;
-  background-color: ${(props) => props.theme[props.color]};
+
+  padding: 8px;
+
   display: flex;
+
+  background: ${(props) => props.theme[props.color]};
   color: ${(props) => props.theme.white};
 `
 

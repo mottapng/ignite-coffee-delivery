@@ -5,6 +5,8 @@ import { mixins } from '../../styles/mixins'
 export const HeaderContainer = styled.header`
   padding: 2rem 0;
 
+  z-index: 1;
+
   display: flex;
   align-items: center;
   justify-content: space-between;

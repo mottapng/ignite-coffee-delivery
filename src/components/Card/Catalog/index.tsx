@@ -5,7 +5,7 @@ import { formatPrice } from '../../../utils/formatPrice'
 import { InputNumber } from '../InputNumber'
 import { CardContainer, CardFooter } from './styles'
 
-export const Card = ({
+export const CatalogCard = ({
   id,
   name,
   description,
