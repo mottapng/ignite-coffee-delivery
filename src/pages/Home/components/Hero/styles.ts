@@ -17,6 +17,7 @@ export const HeroContainer = styled.section`
 export const Background = styled.div`
   position: absolute;
 
+  z-index: -1;
   width: 100%;
 
   top: 6.5%;

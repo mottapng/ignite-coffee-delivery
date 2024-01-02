@@ -11,7 +11,7 @@ export const Success = () => {
         <OrderInfo>
           <div>
             <Icon color="purple">
-              <MapPin size={16} />
+              <MapPin size={16} weight="fill" />
             </Icon>
             <p>
               Entrega em <strong>Rua João Daniel Martinelli, 102</strong>
@@ -22,7 +22,7 @@ export const Success = () => {
 
           <div>
             <Icon color="yellow">
-              <Timer size={16} />
+              <Timer size={16} weight="fill" />
             </Icon>
             <p>
               Previsão de entrega

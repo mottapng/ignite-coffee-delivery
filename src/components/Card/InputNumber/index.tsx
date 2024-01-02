@@ -1,23 +1,18 @@
 import { Minus, Plus } from 'phosphor-react'
 
-import { useState } from 'react'
 import { InputNumberContainer } from './styles'
 
-export const InputNumber = () => {
-  const [count, setCount] = useState(1)
+interface InputNumberProps {
+  count: number
+  increment: () => void
+  decrement: () => void
+}
 
-  const increment = () => {
-    if (count < 99) {
-      setCount((prevCount) => prevCount + 1)
-    }
-  }
-
-  const decrement = () => {
-    if (count > 1) {
-      setCount((prevCount) => prevCount - 1)
-    }
-  }
-
+export const InputNumber = ({
+  count,
+  increment,
+  decrement,
+}: InputNumberProps) => {
   return (
     <InputNumberContainer>
       <button onClick={decrement}>

@@ -237,13 +237,19 @@ export const CartContainer = styled.div`
 
     transition: 0.1s ease-in-out;
 
-    &:hover {
+    &:disabled {
+      background: ${({ theme }) => theme['base-button']};
+      color: ${({ theme }) => theme['base-label']};
+      cursor: not-allowed;
+    }
+
+    &:not(:disabled):hover {
       background: ${({ theme }) => theme['yellow-dark']};
     }
   }
 `
 
-export const PriceInfo = styled.div`
+export const PriceInfo = styled.div<{ isCartEmpty: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -259,7 +265,7 @@ export const PriceInfo = styled.div`
     color: ${({ theme }) => theme['base-text']};
 
     &:first-of-type {
-      margin-top: 1.5rem;
+      margin-top: ${({ isCartEmpty }) => (!isCartEmpty ? '1.5rem' : 0)};
     }
   }
 

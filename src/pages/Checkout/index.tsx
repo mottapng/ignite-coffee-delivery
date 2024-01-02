@@ -9,6 +9,9 @@ import { useNavigate } from 'react-router-dom'
 
 import { useState } from 'react'
 import { CartCard } from '../../components/Card/Cart'
+import { coffees } from '../../constants/coffees'
+import { useCart } from '../../hooks/useCart'
+import { formatPrice } from '../../utils/formatPrice'
 import {
   AddressForm,
   Button,
@@ -30,7 +33,9 @@ export const Checkout = () => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<
     PaymentMethods | undefined
   >(undefined)
+
   const navigate = useNavigate()
+  const { cartItems } = useCart()
 
   const handleConfirmOrder = () => {
     navigate('/order/1')
@@ -39,6 +44,29 @@ export const Checkout = () => {
   const handleSelectPaymentMethod = (method: PaymentMethods) => {
     setSelectedPaymentMethod(method)
   }
+
+  const cartItemsInfo = cartItems.map((item) => {
+    const coffee = coffees.find((coffee) => coffee.id === item.id)
+
+    if (!coffee) {
+      throw new Error('Coffee not found')
+    }
+
+    return {
+      ...coffee,
+      quantity: item.quantity,
+    }
+  })
+
+  const totalItemsPrice = cartItemsInfo.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0,
+  )
+
+  const isCartEmpty = cartItems.length < 1
+
+  const deliveryPrice = isCartEmpty ? 0 : 3.5
+  const totalPrice = totalItemsPrice + deliveryPrice
 
   return (
     <CheckoutContainer>
@@ -129,28 +157,33 @@ export const Checkout = () => {
         <FormRightSide>
           <h2>Cafés selecionados</h2>
           <CartContainer>
-            <CartCard
-              image="/coffees/expresso.png"
-              name="Expresso Tradicional"
-              price={9.9}
-            />
-            <CartCard
-              image="/coffees/expresso.png"
-              name="Expresso Tradicional"
-              price={9.9}
-            />
-            <PriceInfo>
+            {!isCartEmpty &&
+              cartItemsInfo.map((item) => (
+                <CartCard
+                  key={item.id}
+                  id={item.id}
+                  image={item.image}
+                  name={item.name}
+                  price={item.price}
+                  quantity={item.quantity}
+                />
+              ))}
+            <PriceInfo isCartEmpty={isCartEmpty}>
               <p>
-                Total de itens<span>R$ 29,70</span>
+                Total de itens<span>R$ {formatPrice(totalItemsPrice)}</span>
               </p>
-              <p>
-                Entrega<span>R$ 3,50</span>
-              </p>
+              {!isCartEmpty && (
+                <p>
+                  Entrega<span>R$ {formatPrice(deliveryPrice)}</span>
+                </p>
+              )}
               <strong>
-                Total<span>R$ 33,20</span>
+                Total<span>R$ {formatPrice(totalPrice)}</span>
               </strong>
             </PriceInfo>
-            <button onClick={handleConfirmOrder}>CONFIRMAR PEDIDO</button>
+            <button onClick={handleConfirmOrder} disabled={isCartEmpty}>
+              CONFIRMAR PEDIDO
+            </button>
           </CartContainer>
         </FormRightSide>
       </FormContainer>
