@@ -15,11 +15,11 @@ export const InputNumber = ({
 }: InputNumberProps) => {
   return (
     <InputNumberContainer>
-      <button onClick={decrement}>
+      <button type="button" onClick={decrement}>
         <Minus size={14} weight="bold" />
       </button>
       <span>{count}</span>
-      <button onClick={increment}>
+      <button type="button" onClick={increment}>
         <Plus size={14} weight="bold" />
       </button>
     </InputNumberContainer>

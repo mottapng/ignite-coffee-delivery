@@ -37,7 +37,7 @@ export const Success = () => {
               </strong>
               <br />
               {order?.orderForm.neighborhood} - {order?.orderForm.city},{' '}
-              {order?.orderForm.state}
+              {order?.orderForm.state.toUpperCase()}
             </p>
           </div>
 

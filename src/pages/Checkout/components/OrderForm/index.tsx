@@ -5,6 +5,7 @@ import {
   MapPinLine,
   Money,
 } from 'phosphor-react'
+import InputMask from 'react-input-mask'
 
 import { useFormContext } from 'react-hook-form'
 import { orderFormData } from '../..'
@@ -21,7 +22,13 @@ import {
 type PaymentMethodTypes = 'credit' | 'debit' | 'cash'
 
 export const OrderForm = () => {
-  const { register, watch, setValue } = useFormContext<orderFormData>()
+  const {
+    register,
+    watch,
+    setValue,
+    trigger,
+    formState: { errors },
+  } = useFormContext<orderFormData>()
 
   const paymentMethod = watch('paymentMethod')
 
@@ -31,6 +38,8 @@ export const OrderForm = () => {
   ) => {
     event.preventDefault()
     setValue('paymentMethod', method)
+
+    trigger('paymentMethod')
   }
 
   return (
@@ -47,44 +56,104 @@ export const OrderForm = () => {
           </div>
 
           <div>
-            <InputContainer width="196px" disableBasis>
-              <input type="text" placeholder="CEP" {...register('cep')} />
+            <InputContainer width="196px" disableBasis hasErrors={!!errors.cep}>
+              <InputMask
+                mask={'99999-999'}
+                alwaysShowMask={false}
+                maskPlaceholder=""
+                type={'text'}
+                inputMode="numeric"
+                placeholder="CEP"
+                {...register('cep')}
+                onFocus={(e) => (e.target.placeholder = '')}
+                onBlur={(e) => (e.target.placeholder = 'CEP')}
+                autoComplete="off"
+              />
             </InputContainer>
-            <InputContainer>
-              <input type="text" placeholder="Rua" {...register('street')} />
+            <InputContainer hasErrors={!!errors.street}>
+              <input
+                type="text"
+                placeholder="Rua"
+                {...register('street')}
+                inputMode="numeric"
+                onFocus={(e) => (e.target.placeholder = '')}
+                onBlur={(e) => (e.target.placeholder = 'Rua')}
+                autoComplete="off"
+              />
             </InputContainer>
 
             <div>
-              <InputContainer width="35%">
+              <InputContainer width="35%" hasErrors={!!errors.number}>
                 <input
-                  type="number"
+                  type="text"
+                  inputMode="numeric"
                   placeholder="Número"
                   {...register('number')}
+                  onInput={(e) => {
+                    e.currentTarget.value = e.currentTarget.value.replace(
+                      /[^0-9]/g,
+                      '',
+                    )
+                  }}
+                  maxLength={5}
+                  onFocus={(e) => (e.target.placeholder = '')}
+                  onBlur={(e) => (e.target.placeholder = 'Número')}
+                  autoComplete="off"
                 />
               </InputContainer>
 
-              <InputContainer optional>
+              <InputContainer optional hasErrors={!!errors.complement}>
                 <input
                   type="text"
                   placeholder="Complemento"
                   {...register('complement')}
+                  onFocus={(e) => (e.target.placeholder = '')}
+                  onBlur={(e) => (e.target.placeholder = 'Complemento')}
+                  autoComplete="off"
                 />
               </InputContainer>
             </div>
 
             <div>
-              <InputContainer width="35%">
+              <InputContainer width="35%" hasErrors={!!errors.neighborhood}>
                 <input
                   type="text"
                   placeholder="Bairro"
                   {...register('neighborhood')}
+                  onFocus={(e) => (e.target.placeholder = '')}
+                  onBlur={(e) => (e.target.placeholder = 'Bairro')}
+                  autoComplete="off"
                 />
               </InputContainer>
-              <InputContainer>
-                <input type="text" placeholder="Cidade" {...register('city')} />
+
+              <InputContainer hasErrors={!!errors.city}>
+                <input
+                  type="text"
+                  placeholder="Cidade"
+                  {...register('city')}
+                  onFocus={(e) => (e.target.placeholder = '')}
+                  onBlur={(e) => (e.target.placeholder = 'Cidade')}
+                  autoComplete="off"
+                />
               </InputContainer>
-              <InputContainer width="3.75rem">
-                <input type="text" placeholder="UF" {...register('state')} />
+
+              <InputContainer width="3.75rem" hasErrors={!!errors.state}>
+                <input
+                  type="text"
+                  placeholder="UF"
+                  maxLength={2}
+                  onInput={(e) => {
+                    e.currentTarget.value = e.currentTarget.value.replace(
+                      /[^a-zA-Z]/g,
+                      '',
+                    )
+                  }}
+                  {...register('state')}
+                  onFocus={(e) => (e.target.placeholder = '')}
+                  onBlur={(e) => (e.target.placeholder = 'UF')}
+                  autoComplete="off"
+                  style={{ textTransform: 'uppercase' }}
+                />
               </InputContainer>
             </div>
           </div>
@@ -101,7 +170,7 @@ export const OrderForm = () => {
             </div>
           </div>
 
-          <SelectGroup>
+          <SelectGroup hasErrors={!!errors.paymentMethod}>
             <Button
               isSelected={paymentMethod === 'credit'}
               onClick={(event) => handleSelectPaymentMethod(event, 'credit')}

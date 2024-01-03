@@ -76,6 +76,7 @@ interface InputProps {
   width?: string
   disableBasis?: boolean
   optional?: boolean
+  hasErrors?: boolean
 }
 
 export const InputContainer = styled.div<InputProps>`
@@ -103,6 +104,10 @@ export const InputContainer = styled.div<InputProps>`
       top: 50%;
       transform: translateY(-50%);
     }
+
+    &:focus-within::after {
+      opacity: 0;
+    }
   `}
 
   input {
@@ -111,8 +116,6 @@ export const InputContainer = styled.div<InputProps>`
 
     padding: 0.75rem;
     border-radius: 4px;
-
-    ${({ optional }) => optional && 'padding-right: 4rem;'}
 
     border: 1px solid ${({ theme }) => theme['base-button']};
     background: ${({ theme }) => theme['base-input']};
@@ -135,8 +138,15 @@ export const InputContainer = styled.div<InputProps>`
     }
 
     &::placeholder {
-      color: ${({ theme }) => theme['base-label']};
+      color: ${({ hasErrors, theme }) =>
+        hasErrors ? theme['red-error'] : theme['base-label']};
     }
+
+    ${({ hasErrors, theme }) =>
+      hasErrors &&
+      `
+      border: 1px solid ${theme['red-error']};
+    `}
 
     &:focus {
       border: 1px solid ${({ theme }) => theme['yellow-dark']};
@@ -154,11 +164,19 @@ export const PaymentForm = styled(BaseContainers)`
   gap: 2rem;
 `
 
-export const SelectGroup = styled.div`
+export const SelectGroup = styled.div<{ hasErrors: boolean }>`
   display: flex;
   flex-wrap: wrap;
 
   gap: 0.75rem;
+
+  button {
+    ${({ hasErrors, theme }) =>
+      hasErrors &&
+      `
+      border: 1px solid ${theme['red-error']};
+  `}
+  }
 `
 
 export const Button = styled.button<{ isSelected?: boolean }>`
@@ -185,6 +203,14 @@ export const Button = styled.button<{ isSelected?: boolean }>`
       !isSelected && theme['base-hover']};
     color: ${({ isSelected, theme }) => !isSelected && theme['base-subtitle']};
   }
+
+  ${({ isSelected, theme }) =>
+    !isSelected &&
+    `
+    &:focus {
+      border: 1px solid ${theme['yellow-dark']};
+    }
+  `}
 
   ${({ isSelected, theme }) =>
     isSelected &&

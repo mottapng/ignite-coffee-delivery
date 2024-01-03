@@ -55,7 +55,7 @@ export const CatalogCard = ({
             increment={increment}
             decrement={decrement}
           />
-          <button onClick={handleAddNewItem}>
+          <button type="button" onClick={handleAddNewItem}>
             <ShoppingCart weight="fill" size={22} />
           </button>
         </div>

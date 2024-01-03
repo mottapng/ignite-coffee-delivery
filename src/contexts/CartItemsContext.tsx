@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useReducer } from 'react'
+import { ReactNode, createContext, useEffect, useReducer } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import {
@@ -36,12 +36,29 @@ export function CartItemsProvider({ children }: { children: ReactNode }) {
       order: null,
     },
     (initialState) => {
+      const storedStateAsJSON = localStorage.getItem(
+        '@ignite-coffee-delivery:cart-items-state-1.0.0',
+      )
+
+      if (storedStateAsJSON) {
+        return JSON.parse(storedStateAsJSON)
+      }
+
       return initialState
     },
   )
 
   const { cartItems, order } = itemsState
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const stateJSON = JSON.stringify(itemsState)
+
+    localStorage.setItem(
+      '@ignite-coffee-delivery:cart-items-state-1.0.0',
+      stateJSON,
+    )
+  }, [itemsState])
 
   function addNewItem(item: Item) {
     dispatch(addNewItemAction(item))
