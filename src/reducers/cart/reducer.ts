@@ -7,8 +7,26 @@ export interface Item {
   quantity: number
 }
 
+export interface OrderFormInfo {
+  cep: string
+  street: string
+  number: string
+  complement?: string
+  neighborhood: string
+  city: string
+  state: string
+  paymentMethod: string
+}
+
+export interface Order {
+  id: string
+  items: Item[]
+  orderForm: OrderFormInfo
+}
+
 interface CartState {
   cartItems: Item[]
+  order: Order | null
 }
 
 export function cartReducer(state: CartState, action: Actions) {
@@ -57,6 +75,19 @@ export function cartReducer(state: CartState, action: Actions) {
         if (itemIndex >= 0) {
           draft.cartItems.splice(itemIndex, 1)
         }
+      })
+
+    case ActionTypes.CREATE_ORDER:
+      return produce(state, (draft) => {
+        const order = {
+          id: new Date().getTime().toString(),
+          items: [...draft.cartItems],
+          orderForm: action.payload.orderForm,
+        }
+
+        draft.order = order
+
+        action.payload.callback(`/order/${order.id}`)
       })
 
     default:

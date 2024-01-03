@@ -1,5 +1,6 @@
 export const defaultTheme = {
   'base-hover': '#d7d5d5',
+  'base-shadow': '#BEB6B6',
   'base-label': '#8d8686',
   'base-text': '#574f4d',
   'base-subtitle': '#403937',

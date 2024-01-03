@@ -1,7 +1,24 @@
 import { CurrencyDollar, MapPin, Timer } from 'phosphor-react'
+
+import { useCart } from '../../hooks/useCart'
 import { Icon, ImageContainer, OrderInfo, SuccessContainer } from './styles'
 
 export const Success = () => {
+  const { order } = useCart()
+
+  const formatPaymentMethod = (paymentMethod?: string) => {
+    switch (paymentMethod) {
+      case 'credit':
+        return 'Cartão de Crédito'
+      case 'debit':
+        return 'Cartão de Débito'
+      case 'cash':
+        return 'Dinheiro'
+      default:
+        return 'Não informado'
+    }
+  }
+
   return (
     <SuccessContainer>
       <h1>Uhu! Pedido confirmado</h1>
@@ -14,9 +31,13 @@ export const Success = () => {
               <MapPin size={16} weight="fill" />
             </Icon>
             <p>
-              Entrega em <strong>Rua João Daniel Martinelli, 102</strong>
+              Entrega em{' '}
+              <strong>
+                {order?.orderForm.street}, {order?.orderForm.number}
+              </strong>
               <br />
-              Farrapos - Porto Alegre, RS
+              {order?.orderForm.neighborhood} - {order?.orderForm.city},{' '}
+              {order?.orderForm.state}
             </p>
           </div>
 
@@ -38,7 +59,9 @@ export const Success = () => {
             <p>
               Pagamento na entrega
               <br />
-              <strong>Cartão de Crédito</strong>
+              <strong>
+                {formatPaymentMethod(order?.orderForm.paymentMethod)}
+              </strong>
             </p>
           </div>
         </OrderInfo>

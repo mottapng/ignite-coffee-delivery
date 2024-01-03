@@ -1,19 +1,29 @@
 import { ReactNode, createContext, useReducer } from 'react'
+import { useNavigate } from 'react-router-dom'
+
 import {
   addNewItemAction,
+  createOrderAction,
   decrementItemAction,
   incrementItemAction,
   removeItemAction,
 } from '../reducers/cart/actions'
-import { Item, cartReducer } from '../reducers/cart/reducer'
+import {
+  Item,
+  Order,
+  OrderFormInfo,
+  cartReducer,
+} from '../reducers/cart/reducer'
 
 interface CartItemsContextType {
   cartItems: Item[]
+  order: Order | null
 
   addNewItem: (item: Item) => void
   incrementItem: (id: string) => void
   decrementItem: (id: string) => void
   removeItem: (id: string) => void
+  createOrder: (orderForm: OrderFormInfo) => void
 }
 
 export const CartItemsContext = createContext({} as CartItemsContextType)
@@ -23,13 +33,15 @@ export function CartItemsProvider({ children }: { children: ReactNode }) {
     cartReducer,
     {
       cartItems: [],
+      order: null,
     },
     (initialState) => {
       return initialState
     },
   )
 
-  const { cartItems } = itemsState
+  const { cartItems, order } = itemsState
+  const navigate = useNavigate()
 
   function addNewItem(item: Item) {
     dispatch(addNewItemAction(item))
@@ -47,14 +59,20 @@ export function CartItemsProvider({ children }: { children: ReactNode }) {
     dispatch(removeItemAction(id))
   }
 
+  function createOrder(orderForm: OrderFormInfo) {
+    dispatch(createOrderAction(orderForm, navigate))
+  }
+
   return (
     <CartItemsContext.Provider
       value={{
+        order,
         cartItems,
         addNewItem,
         incrementItem,
         decrementItem,
         removeItem,
+        createOrder,
       }}
     >
       {children}

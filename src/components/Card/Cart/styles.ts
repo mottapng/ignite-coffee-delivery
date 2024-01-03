@@ -17,7 +17,10 @@ export const CardContainer = styled.div`
   img {
     width: 4rem;
     height: 4rem;
+
+    filter: drop-shadow(-3px 3px 5px ${({ theme }) => theme['base-shadow']});
   }
+
   h3 {
     flex: 1;
     ${mixins.fonts.textM}
